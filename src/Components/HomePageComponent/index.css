@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1rem;
 }
 
 .websiteLogoImage {
@@ -47,8 +48,7 @@
 }
 
 .imageToBeMatchedStyle {
-  width: 450px;
-  height: 250px;
+  width: 90%;
 }
 
 .ulTabsContainer {
@@ -68,5 +68,32 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
+}
+
+.gameOverContainer {
+  background-image: url('https://assets.ccbp.in/frontend/react-js/match-game-score-card-sm-bg.png');
+  min-height: 100vh;
+  background-size: cover;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem;
+  width: 90%;
+}
+
+.trophyStyle {
+  height: 260px;
+  width: 430px;
+}
+
+.btnPlayStyle {
+  background-color: #cf60c8;
+  border: 0px solid transparent;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-around;
   align-items: center;
 }

@@ -14,7 +14,6 @@ const tabsList = [
   {tabId: 'ANIMAL', displayText: 'Animals'},
   {tabId: 'PLACE', displayText: 'Places'},
 ]
-console.log(tabsList)
 
 const imagesList = [
   {
@@ -256,21 +255,84 @@ const imagesList = [
   },
 ]
 
-console.log(imagesList)
-
 class HomePageComponent extends Component {
-  state = {ActiveTabId: 'FRUIT'}
+  state = {
+    ActiveTabId: 'FRUIT',
+    score: 0,
+    seconds: 60,
+  }
+
+  componentDidMount() {
+    this.intervalUniqueId = setInterval(() => {
+      this.setState(prevState => ({seconds: prevState.seconds - 1}))
+    }, 1000)
+  }
 
   clickedTabBtn = idName => {
     this.setState({ActiveTabId: idName})
   }
 
   render() {
-    const {ActiveTabId} = this.state
+    const {ActiveTabId, score, seconds} = this.state
 
     const initialItems = imagesList.filter(
       eachFilterObjects => eachFilterObjects.category === ActiveTabId,
     )
+
+    console.log(initialItems)
+
+    const renderUi = () => {
+      if (seconds === 0) {
+        clearInterval(this.intervalUniqueId)
+        return (
+          <div className="gameOverContainer">
+            <img
+              src="https://assets.ccbp.in/frontend/react-js/match-game-trophy.png"
+              alt="trophy"
+              className="trophyStyle"
+            />
+            <h1>YOUR SCORE</h1>
+            <p>0</p>
+            <button type="button" className="btnPlayStyle">
+              <img
+                src="https://assets.ccbp.in/frontend/react-js/match-game-play-again-img.png"
+                alt="reset"
+              />
+              <span>PLAY AGAIN</span>
+            </button>
+          </div>
+        )
+      }
+      return (
+        <>
+          <img
+            src={initialItems[0].imageUrl}
+            alt="match"
+            className="imageToBeMatchedStyle"
+          />
+
+          <ul className="ulTabsContainer">
+            {tabsList.map(eachObject => (
+              <TabItem
+                eachObjectProp={eachObject}
+                clickedTabBtnProp={this.clickedTabBtn}
+                isActive={eachObject.tabId === ActiveTabId}
+                key={eachObject.tabId}
+              />
+            ))}
+          </ul>
+
+          <ul className="ulTabItems">
+            {initialItems.map(eachObjectItem => (
+              <AppItem
+                eachObjectItemProp={eachObjectItem}
+                key={eachObjectItem.id}
+              />
+            ))}
+          </ul>
+        </>
+      )
+    }
 
     return (
       <div className="bg">
@@ -282,42 +344,17 @@ class HomePageComponent extends Component {
           />
           <div className="scoreNdTimeContainer">
             <p>
-              Score: <span className="yellowText">0</span>
+              Score: <span className="yellowText">{score}</span>
             </p>
             <img
               src="https://assets.ccbp.in/frontend/react-js/match-game-timer-img.png"
               alt="timer"
               className="timerLogoImage"
             />
-            <p className="yellowText">60 sec</p>
+            <p className="yellowText">{seconds} sec</p>
           </div>
         </nav>
-
-        <img
-          src="https://assets.ccbp.in/frontend/react-js/match-game/orange-img.png"
-          alt="match"
-          className="imageToBeMatchedStyle"
-        />
-
-        <ul className="ulTabsContainer">
-          {tabsList.map(eachObject => (
-            <TabItem
-              eachObjectProp={eachObject}
-              clickedTabBtnProp={this.clickedTabBtn}
-              isActive={eachObject.tabId === ActiveTabId}
-              key={eachObject.tabId}
-            />
-          ))}
-        </ul>
-
-        <ul className="ulTabItems">
-          {initialItems.map(eachObjectItem => (
-            <AppItem
-              eachObjectItemProp={eachObjectItem}
-              key={eachObjectItem.id}
-            />
-          ))}
-        </ul>
+        {renderUi()}
       </div>
     )
   }
